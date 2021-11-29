@@ -101,24 +101,11 @@
 
     <div class="extra_info_wrapper" *ngIf="!firstPage">
         <p><b>My balance: </b>{{ my_balance || '0' }}</p>
-        <p><b>Mining difficulty: </b>
-            <select name="difficulty" id="difficulty" [(ngModel)]="blockchain.difficulty">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-            </select>
-        </p>
-        <p><b>Pending transactions: </b>{{ pendingTransactions?.length || '0' }}</p>
+        <p><b>Pending messages: </b>{{ pendingTransactions?.length || '0' }}</p>
         <button (click)="transactionCreator = !transactionCreator">Message creator</button>
         <button (click)="minePendingTransactions0()" class="button button-primary">Mine pending messages</button>
     </div>
 
-
-
     <div id="div1" class="page-wrapper">
     </div>
-
 </div>
