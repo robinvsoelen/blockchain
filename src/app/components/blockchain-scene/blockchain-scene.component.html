@@ -1,0 +1,115 @@
+<div class="mainPage">
+    <canvas (window:resize)="onResized($event)" #canvas id="canvas" style="height: 100%, width=100%;">
+        <!-- <app-block-view *ngFor="let block of blocks" [block]="block">
+        {{ block }}
+    </app-block-view>  -->
+    </canvas>
+
+
+    <div class="title_wrapper" *ngIf="firstPage && !transactionCreator">
+        <h1 class="title">THE BLOCKCHAIN EXPLAIN TRAIN</h1>
+        <p>A small insight into how Blockhain works</p>
+    </div>
+
+
+    <div *ngIf="!firstPage && !transactionCreator" class="transaction_wrapper">
+        <div>
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="transaction" *ngFor="let transaction of currentBlock['transactions']; index as index">
+                        <td>{{index}}</td>
+                        <td class="profile-box">
+                            <img *ngIf="transaction.fromAddress == walletKey.publicKey"
+                                title="{{transaction.fromAddress}}" class="profile_pic" src={{senseiImg}}>
+                            <img *ngIf="transaction.fromAddress == senseiKey.publicKey"
+                                title="{{transaction.fromAddress}}" class="profile_pic" src={{meImg}}>
+                        </td>
+                        <td class="profile-box">
+                            <img *ngIf="transaction.toAddress == walletKey.publicKey" title="{{transaction.toAddress}}"
+                                class="profile_pic" src={{senseiImg}}>
+                            <img *ngIf="transaction.toAddress == senseiKey.publicKey" title="{{transaction.toAddress}}"
+                                class="profile_pic" src={{meImg}}>
+                                <p *ngIf="transaction.toAddress != walletKey.publicKey && transaction.toAddress != senseiKey.publicKey">{{transaction.toAddress}}</p>
+
+                        </td>
+                        <td class="text-truncate">
+                            {{transaction.amount}}
+                            <span *ngIf="transaction.fromAddress === null" class="text-muted"><small>(Block
+                                    reward)</small></span>
+                        </td>
+                        <td class="text-truncate">
+                            {{transaction.text}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="transaction_wrapper" *ngIf="transactionCreator">
+        <div>
+            <h1>Create Transaction</h1>
+            <br>
+            <div class="form-group">
+                <label>From address</label>
+                <input type="text" class="form-control" [(ngModel)]="walletKey.publicKey" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="toAddress">To address</label>
+                <input type="text" class="form-control" [(ngModel)]="newTx.toAddress">
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message</label>
+                <input type="text" class="form-control" [(ngModel)]="newTx.text">
+            </div>
+
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" class="form-control" [(ngModel)]="newTx.amount">
+            </div>
+
+            <button (click)="transactionCreator = false" class="button button-primary">Cancel</button>
+
+            <button (click)="createTransaction()" class="button button-primary">Sign and create transaction</button>
+
+        </div>
+
+    </div>
+
+
+
+
+    <div class="extra_info_wrapper">
+        <p><b>My balance: </b>{{ my_balance?.length || '0' }}</p>
+        <button (click)="transactionCreator = !transactionCreator">Transaction creator</button>
+        <p><b>Set mining difficulty: </b>
+            <select name="difficulty" id="difficulty" [(ngModel)]="blockchain.difficulty">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+        </p>
+        <p><b>Pending transactions: </b>{{ pendingTransactions?.length || '0' }}</p>
+        <button (click)="minePendingTransactions()" class="button button-primary">Mine pending transactions</button>
+    </div>
+
+
+
+    <div id="div1" class="page-wrapper">
+    </div>
+
+</div>

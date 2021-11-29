@@ -1,0 +1,89 @@
+
+canvas {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -9999;
+  }
+
+.profile_pic{
+    height:2vw;
+    width: 2vw;
+}
+
+span{
+    display: block;
+}
+
+
+.title_wrapper{
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    text-align: center;
+    transform: translate(-50%,-0%);
+    color: #FFFFFF;
+}
+
+.title{
+    font-size: 10vh;
+}
+
+.extra_info_wrapper{
+    position: fixed;
+    bottom: 3%;
+    left: 3%;
+}
+
+.mainPage{
+    font-family: 'Outfit', sans-serif;
+}
+
+table{
+    width: 50vh;
+    font-size: 1vw;
+}
+
+
+.transaction{
+    //display: flex;
+}
+  .page-wrapper{
+      height: 10000vh;
+  }
+
+
+  .hover-display{
+      visibility: hidden;
+  }
+
+  .blockText{
+      left: 60%;
+      top: 50%;
+      position: fixed;
+  }
+
+
+  /* Hover on Parent Container */
+.profile_box:hover{
+    cursor: pointer;
+   }
+   
+   .profile_box:hover {
+    width: 150px;
+    padding: 8px 15px;
+    visibility: visible;
+    opacity: 0.7; 
+   }
+  .transaction_wrapper{
+      position: fixed;
+      left: 40%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    background-color: rgba($color: #ffffff, $alpha: 1);
+    padding: 1%;
+    border-radius: 15px;
+  }
