@@ -9,8 +9,6 @@ import { CheckboxControlValueAccessor } from '@angular/forms';
 import { copyFile } from 'fs';
 
 
-
-
 @Component({
   selector: 'app-blockchain-scene',
   templateUrl: './blockchain-scene.component.html',
@@ -83,7 +81,7 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
     {
       "from_me": true,
       "amount": 0,
-      "text": "Oh thanks! But what makes it so safe? Can't I just fake being you and send myself more money?"
+      "text": "Oh thanks! But what makes these transactions so safe?"
     },
     {
       "from_me": false,
@@ -137,7 +135,7 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
     {
       "from_me": false,
       "amount": 0,
-      "text": "Lists of transactions are stored in blocks. Proof of work is a method that ensures that the contents of a block cannot be changed."
+      "text": "Lists of transactions (messages) are stored in blocks. Proof of work is a method that ensures that the contents of a block cannot be changed."
     },
     {
       "from_me": true,
@@ -403,7 +401,6 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
   private renderer!: THREE.WebGLRenderer;
 
   private scene!: THREE.Scene;
-
 
 
 
