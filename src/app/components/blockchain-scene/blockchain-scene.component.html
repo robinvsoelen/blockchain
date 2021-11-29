@@ -8,7 +8,7 @@
 
     <div class="title_wrapper" *ngIf="firstPage && !transactionCreator">
         <h1 class="title">THE BLOCKCHAIN EXPLAIN TRAIN</h1>
-        <p>A small insight into how Blockhain works.</p>
+        <p>Congratulations! You have booked a session with Brock Chane instructor of Blockchain</p>
         <br>
         <p>Scroll down to learn more</p>
         <img id=arrow_down src="assets/arrow.svg">
@@ -112,8 +112,8 @@
             </select>
         </p>
         <p><b>Pending transactions: </b>{{ pendingTransactions?.length || '0' }}</p>
-        <button (click)="transactionCreator = !transactionCreator">Transaction creator</button>
-        <button (click)="minePendingTransactions0()" class="button button-primary">Mine pending transactions</button>
+        <button (click)="transactionCreator = !transactionCreator">Message creator</button>
+        <button (click)="minePendingTransactions0()" class="button button-primary">Mine pending messages</button>
     </div>
 
 
