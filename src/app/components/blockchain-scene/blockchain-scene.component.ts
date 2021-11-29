@@ -25,6 +25,7 @@ import { copyFile } from 'fs';
 export class BlockchainSceneComponent implements OnInit, AfterViewInit {
 
   public blocks: any[] = [];
+  public snap_points: any[] = [];
   public currentBlock;
   public index = 0;
   public firstPage = true;
@@ -36,63 +37,224 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
   public senseiKey;
   public pendingTransactions;
   public transactionCreator = false;
+  intro_animation = 2000;
+
 
   cubes: any[] = [];
-  snap_points = [0, 2300, 4300, 6300, 8300, 10300, 12300, 14300];
 
-  meImg = '/assets/mePIC.jpg';
-  senseiImg = '/assets/senseiPIC.png';
+  meImg = '/assets/mePIC.svg';
+  senseiImg = '/assets/senseiPIC.svg';
 
   title = 'blockchain';
 
   public transactionStory = [[
     {
       "from_me": false,
-      "amount": 10000,
-      "text": "Hi, welcome to my Blockchain course. That will be 100 coin up front please"
+      "amount": 0,
+      "text": "Hi there! My name is Brock Chane instructor of Blockchain"
     },
     {
       "from_me": true,
-      "amount": 100,
-      "text": "Ok Sure"
+      "amount": 0,
+      "text": "Oh... wow... hi... Where did you just come from? I'm Steve..."
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "We are talking through transactions inside a Blockchain! Isn't that magnificent!?"
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "I guess..."
     }
   ],
   [
     {
       "from_me": false,
       "amount": 0,
-      "text": "Each of the blocks contains a set of transactions. Speaking of transactions, I need some more money"
+      "text": "For your first lesson you will learn about transactions."
+    },
+    {
+      "from_me": false,
+      "amount": 100,
+      "text": "Cryptocurrencies, like Bitcoin, are used as a safe, anonymous and decentralised alternative for making transactions and are the most popular application of Blockchains. Allow me to demonstrate a transaction of money"
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "Oh thanks! But what makes it so safe? Can't I just fake being you and send myself more money?"
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "To be able to create a transaction you need a digital signature. This signature can only be made using a private/public key pair. You can see my public key by hovering over my face, but I will never give you my private key!"
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "bummer..."
+    },
+  ],
+  [
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "But what makes blockchain so decentralized?"
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "Good question! Blockchain makes use of something called a peer to peer network. Everyone who uses the blockchain gets a copy of that chain. When they add a transaction they broadcast this transaction to all others who use the blockchain. This way there is no central authority like a bank in charge."
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "...by the way, I am going to need that money back"
     },
     {
       "from_me": true,
       "amount": 100,
-      "text": "Oh..."
+      "text": "..."
+    }
+  ],
+  [
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "Why do you get something called a block reward and I don't?"
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "That is my reward for performing a proof of work, also known as mining a block"
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "I am slightly more confused"
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "Lists of transactions are stored in blocks. Proof of work is a method that ensures that the contents of a block cannot be changed."
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "So how does that work?"
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "To create a block, the contents of that block are turned into a hash that has to start with a specific amount of zeros, this amount of zeros is called the difficulty. A hash that fullfills this requirement of zeros can only be found through randomly trying different inputs. This requires computers to work for a long time until a valid hash is found."
+    },
+  ],
+  [
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "I still don't get how this makes it more secure..."
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "This way whenever the contents of the block are changed, the hash changes as well. This means that a new hash needs to be found that fulfills the requirements, which will take a long time"
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "Yeah it might take a bit longer but I don't see how this solves anything"
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "This is where the chain part of the blockchain becomes relevant. Each block that is created links to the hash of the previous block. This way, when one of the hashes of the blocks changes, the chain breaks and the blockchain is no longer valid."
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "Ah.. that makes sense. But why should it take so long to find a hash?"
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "Without the proof of work it would be possible to easily find hashes of the next blocks as well, which would make the chain valid anyways. With proof of work this will become impossible. This is because the longest blockchain is always seen as the correct one. It would be virtually impossible to recalculate all of the hashes yourself and maintain a blockchain that is longer than the actual one"
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "Ah.."
+    }
+  ],
+  [
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "I am glad I now know how cryptocurrencies work, but I am not a criminal and I have no money to spend anyways. So this all still seems a bit useless to me."
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "While cryptocurrencies are the most popular applications of blockchains. They are by far not the only one! Blockchains are simply a very secure, decentralized and anonymous way of storing chronological data."
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "Rad! Can you give me some examples?"
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "There are countless! You can for example use blockchains to keep track of the supply chain in your company, use it as a secure voting mechanism or use it for signing smart contracts"
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "Cool beans!"
     }
   ],
   [
     {
       "from_me": false,
       "amount": 0,
-      "text": "Each of the blocks contains a set of transactions. Speaking of transactions, I need some more money"
+      "text": "Now that I have trained you in the ways of the blockchain. I would like to have my payment please. Because you were such a quick student, that will be 100 coin."
     },
     {
       "from_me": true,
-      "amount": 100,
-      "text": "Oh..."
-    }
-  ],
-  [
+      "amount": 0,
+      "text": "Wait I don't have any money"
+    },
     {
       "from_me": false,
       "amount": 0,
-      "text": "Each of the blocks contains a set of transactions. Speaking of transactions, I need some more money"
+      "text": "Try mining some of the pending transactions"
     },
     {
       "from_me": true,
       "amount": 0,
-      "text": "Oh..."
+      "text": "I'll try..."
+    },
+
+  ],]
+
+  public pendingTransactionStory = [
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "I knew you could do it!!!"
+    },
+    {
+      "from_me": true,
+      "amount": 0,
+      "text": "I am such a proud teacher"
+    },
+    {
+      "from_me": false,
+      "amount": 0,
+      "text": "Now can you please transfer this money to me?"
     }
-  ]]
+  ]
 
   @ViewChild('canvas')
   private canvasRef: ElementRef<HTMLCanvasElement>;
@@ -106,6 +268,42 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.createTransactionStory();
+    this.createPendingTransactions();
+
+  }
+
+  createPendingTransactions() {
+    let component: BlockchainSceneComponent = this;
+    //for each block
+    this.pendingTransactionStory.forEach(function (item, index) {
+      //for each transaction
+      component.newTx = new Transaction()
+      component.newTx.amount = item.amount;
+      component.newTx.text = item.text;
+      if (item.from_me) {
+        component.newTx.fromAddress = component.walletKey.publicKey;
+        component.newTx.toAddress = component.senseiKey.publicKey;
+        component.newTx.signTransaction(component.walletKey.keyObj);
+        component.newTx.img = component.meImg;
+        component.newTx.toImg = component.senseiImg;
+      }
+      else {
+        component.newTx.fromAddress = component.senseiKey.publicKey;
+        component.newTx.toAddress = component.walletKey.publicKey;
+        component.newTx.signTransaction(component.senseiKey.keyObj);
+        component.newTx.img = component.senseiImg;
+        component.newTx.toImg = component.meImg;
+      }
+      component.blockchainService.addTransaction(component.newTx);
+
+      component.newTx = new Transaction();
+    })
+    this.pendingTransactions = this.blockchainService.getPendingTransactions();
+
+  }
+
+  createTransactionStory() {
     let component: BlockchainSceneComponent = this;
     //for each block
     this.transactionStory.forEach(function (item, index) {
@@ -140,10 +338,11 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
       component.amountOfBlocks = component.blocks.length;
       component.my_balance = component.blockchainService.getBalance(component.walletKey.publicKey)
 
+      component.snap_points = component.getSnapPoints();
     })
   }
 
-  createTransaction() {
+  createTransaction0() {
     this.newTx.fromAddress = this.walletKey.publicKey;
     console.log(this.newTx);
     this.newTx.signTransaction(this.walletKey.keyObj);
@@ -153,12 +352,25 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
     this.transactionCreator = false;
   }
 
-  minePendingTransactions() {
+  minePendingTransactions0() {
     this.blockchainService.minePendingTransactions();
     this.drawBlocks();
     this.amountOfBlocks = this.blocks.length;
     this.pendingTransactions = this.blockchainService.getPendingTransactions();
-    this.my_balance = this.blockchainService.getBalance(this.walletKey.publicKey)
+    this.my_balance = this.blockchainService.getBalance(this.walletKey.publicKey);
+    this.snap_points = this.getSnapPoints();
+    console.log(this.my_balance)
+  }
+
+
+  getSnapPoints() {
+    var snap_points: any[] = [];
+    let component: BlockchainSceneComponent = this;
+    this.blocks.forEach(function (block, index) {
+      var point = (index * 2000) + component.intro_animation;
+      snap_points.push(point);
+    })
+    return snap_points;
   }
 
 
@@ -185,8 +397,8 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
   }
 
   private geometry = new THREE.BoxGeometry(1, 1, 1);
-  private selectedMaterial = new THREE.MeshBasicMaterial({ color: '#b7094c' });
-  private unselectedMaterial = new THREE.MeshBasicMaterial({ color: '#5c4d7d' });
+  private selectedMaterial = new THREE.MeshBasicMaterial({ color: '#E63946' });
+  private unselectedMaterial = new THREE.MeshBasicMaterial({ color: '#457B9D' });
 
   private renderer!: THREE.WebGLRenderer;
 
@@ -204,7 +416,7 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
   private createScene() {
     //* Scene
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color('#0091ad');
+    this.scene.background = new THREE.Color('#F1FAEE');
 
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(-1, 1, 1).normalize();
@@ -239,7 +451,7 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
       else {
         object = new THREE.Mesh(component.geometry, component.unselectedMaterial);
       }
-      
+
 
       object.scale.set(1, 1, 1);
       object.position.x = 0.5;
@@ -299,7 +511,7 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
 
       var myText = new Text()
       // Set properties to configure:
-      myText.text = "Nonce: " + block.nonce;
+      myText.text = "nonce: " + block.nonce;
       myText.fontSize = 0.02
       myText.position.x = 0;
       myText.position.y = -0.45;
@@ -308,6 +520,7 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
       // Update the rendering:
       component.scene.add(myText)
       myText.sync()
+
 
       i += 1;
     })
@@ -350,8 +563,8 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
 
   private updateCamera(ev) {
     let div1 = document.getElementById("div1");
-    this.camera.position.z = 70 - window.scrollY / 500.0;
-    this.camera.position.x = -10 - window.scrollY / 500.0
+
+
   }
 
 
@@ -376,8 +589,17 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
 
     (function render() {
       requestAnimationFrame(render);
-      component.camera.position.z = 70 - window.scrollY / 100.0;
-      component.camera.position.x = -2 + window.scrollY / 16000.0;
+
+      if (window.pageYOffset < component.intro_animation) {
+        component.camera.position.y = 2 - window.scrollY / 1000;
+        component.camera.position.z = 90 - window.scrollY / 100.0;
+
+      }
+      else {
+        component.camera.position.z = 90 - window.scrollY / 100.0;
+        component.camera.position.x = -2 + window.scrollY / 16000.0;
+      }
+
       component.snap_points.forEach(function (position, index) {
         if ((position - window.pageYOffset) < 700 && (position - window.pageYOffset) > -700) {
           // window.scrollTo({

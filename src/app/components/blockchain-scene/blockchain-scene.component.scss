@@ -10,8 +10,9 @@ canvas {
   }
 
 .profile_pic{
-    height:2vw;
-    width: 2vw;
+    height:3vw;
+    width: 3vw;
+    border-radius: 50%;
 }
 
 span{
@@ -20,22 +21,27 @@ span{
 
 
 .title_wrapper{
-    position: fixed;
+    position: absolute;
     top: 10%;
     left: 50%;
     text-align: center;
     transform: translate(-50%,-0%);
-    color: #FFFFFF;
+    color: #1D3557;
+    transition: 1s;
 }
 
 .title{
     font-size: 10vh;
+    transition: 1s;
+
 }
 
 .extra_info_wrapper{
     position: fixed;
     bottom: 3%;
     left: 3%;
+    padding: 0.5%;
+    border-radius: 5%;
 }
 
 .mainPage{
@@ -43,16 +49,25 @@ span{
 }
 
 table{
-    width: 50vh;
-    font-size: 1vw;
+    width: 60vw;
+    font-size: 16px;
+    color: #1D3557;
+    border-spacing: 0px;
+}
+
+.table{
+   color: #1D3557;
+
+}
+
+td{
+    word-wrap: break-word;
+
 }
 
 
-.transaction{
-    //display: flex;
-}
   .page-wrapper{
-      height: 10000vh;
+      height: 5000vh;
   }
 
 
@@ -66,6 +81,10 @@ table{
       position: fixed;
   }
 
+  #arrow_down{
+      width: 5vh;
+      }
+
 
   /* Hover on Parent Container */
 .profile_box:hover{
@@ -78,12 +97,33 @@ table{
     visibility: visible;
     opacity: 0.7; 
    }
+
+   .extra_info_wrapper{
+    background-color: rgba($color: #F1FAEE, $alpha: 0.5);
+       color: #1D3557;
+   }
   .transaction_wrapper{
       position: fixed;
-      left: 40%;
+      left: 60%;
       top: 50%;
       transform: translate(-50%, -50%);
-    background-color: rgba($color: #ffffff, $alpha: 1);
+    background-color: rgba($color: #F1FAEE, $alpha: 1);
     padding: 1%;
+    color: #1D3557;
     border-radius: 15px;
+    transition: 0.2s;
+    opacity: 1;
   }
+
+  .hidden_transaction_wrapper{
+    position: fixed;
+    left: 60%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+  background-color: rgba($color: #F1FAEE, $alpha: 1);
+  padding: 1%;
+  color: #1D3557;
+  border-radius: 15px;
+  transition: 0s;
+  opacity: 0;
+}

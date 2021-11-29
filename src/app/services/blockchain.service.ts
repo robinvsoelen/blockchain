@@ -28,7 +28,7 @@ export class BlockchainService {
 
 
    getBalance(address){
-     this.blockchainInstance.getBalanceOfAddress(address);
+     return this.blockchainInstance.getBalanceOfAddress(address);
    }
 
 
@@ -37,7 +37,7 @@ export class BlockchainService {
    }
 
    getPendingTransactions(){
-     this.blockchainInstance.getPendingTransactions;
+     return this.blockchainInstance.pendingTransactions;
    }
 
    minePendingTransactions(){
