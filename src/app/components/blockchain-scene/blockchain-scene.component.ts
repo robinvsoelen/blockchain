@@ -249,7 +249,7 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
       "text": "I knew you could do it!!!"
     },
     {
-      "from_me": true,
+      "from_me": false,
       "amount": 0,
       "text": "I am such a proud teacher"
     },
