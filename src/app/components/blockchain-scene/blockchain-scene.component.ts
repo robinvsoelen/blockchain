@@ -3,10 +3,10 @@ import { BlockchainService } from 'src/app/services/blockchain.service';
 import { Transaction } from 'savjeecoin/src/blockchain'
 import * as THREE from "three";
 import { Text } from 'troika-three-text'
-import ScrollSnap from 'scroll-snap';
 import { createSecureContext } from 'tls';
 import { CheckboxControlValueAccessor } from '@angular/forms';
 import { copyFile } from 'fs';
+import { timeStamp } from 'console';
 
 
 @Component({
@@ -22,7 +22,10 @@ import { copyFile } from 'fs';
 
 export class BlockchainSceneComponent implements OnInit, AfterViewInit {
 
+
   public blocks: any[] = [];
+
+  //the points that determine which block is selected
   public snap_points: any[] = [];
   public currentBlock;
   public index = 0;
@@ -45,6 +48,9 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
 
   title = 'blockchain';
 
+
+
+  //Blocks that are created when opening the page
   public transactionStory = [[
     {
       "from_me": false,
@@ -257,7 +263,6 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
   @ViewChild('canvas')
   private canvasRef: ElementRef<HTMLCanvasElement>;
 
-
   constructor(private blockchainService: BlockchainService) {
     this.blockchain = blockchainService.blockchainInstance;
     this.blocks = blockchainService.getBlocks();
@@ -268,14 +273,14 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.createTransactionStory();
     this.createPendingTransactions();
-
   }
 
+
+  //Creating the transaction at the beginning of the page that still need to be mined
   createPendingTransactions() {
     let component: BlockchainSceneComponent = this;
-    //for each block
+    //for each transaction
     this.pendingTransactionStory.forEach(function (item, index) {
-      //for each transaction
       component.newTx = new Transaction()
       component.newTx.amount = item.amount;
       component.newTx.text = item.text;
@@ -301,6 +306,7 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
 
   }
 
+  //Creating the blocks at when the page is loaded
   createTransactionStory() {
     let component: BlockchainSceneComponent = this;
     //for each block
@@ -330,17 +336,14 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
       }
       )
       component.blockchainService.mineSenseiTransactions();
-
-      console.log(component.blocks[1]['transactions']);
       component.currentBlock = component.blocks[0];
       component.amountOfBlocks = component.blocks.length;
       component.my_balance = component.blockchainService.getBalance(component.walletKey.publicKey)
-
       component.snap_points = component.getSnapPoints();
     })
   }
 
-  createTransaction0() {
+  createTransaction() {
     this.newTx.fromAddress = this.walletKey.publicKey;
     console.log(this.newTx);
     this.newTx.signTransaction(this.walletKey.keyObj);
@@ -350,7 +353,7 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
     this.transactionCreator = false;
   }
 
-  minePendingTransactions0() {
+  minePendingTransactions() {
     this.blockchainService.minePendingTransactions();
     this.drawBlocks();
     this.amountOfBlocks = this.blocks.length;
@@ -361,6 +364,7 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
   }
 
 
+  //get the points that determine which block is selected
   getSnapPoints() {
     var snap_points: any[] = [];
     let component: BlockchainSceneComponent = this;
@@ -397,19 +401,12 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
   private geometry = new THREE.BoxGeometry(1, 1, 1);
   private selectedMaterial = new THREE.MeshBasicMaterial({ color: '#E63946' });
   private unselectedMaterial = new THREE.MeshBasicMaterial({ color: '#457B9D' });
-
   private renderer!: THREE.WebGLRenderer;
-
   private scene!: THREE.Scene;
 
 
 
-  /**
-   * Create the scene
-   *
-   * @private
-   * @memberof BlockchainSceneComponent
-   */
+  //Create the scene
   private createScene() {
     //* Scene
     this.scene = new THREE.Scene();
@@ -419,7 +416,6 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
     light.position.set(-1, 1, 1).normalize();
     this.scene.add(light);
     this.drawBlocks();
-
 
     //*Camera
     let aspectRatio = this.getAspectRatio();
@@ -449,13 +445,36 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
         object = new THREE.Mesh(component.geometry, component.unselectedMaterial);
       }
 
-
       object.scale.set(1, 1, 1);
       object.position.x = 0.5;
       object.position.z = -i * 20;
       component.cubes.push(object);
-      //this.scene.add(object);
 
+      const amount_of_lines = 4;
+      for (let j = 0; j < amount_of_lines; j++) {
+        var myText = new Text()
+        // Set properties to configure:
+        if (j ==0){
+          myText.text = "Hash: " + block.hash;
+        }
+        if (j ==1){
+          myText.text = "Previous hash: " + block.previousHash;
+        }
+        if (j ==2){
+          myText.text = "Time stamp: " + block.timestamp;
+        }
+        if (j ==3){
+          myText.text = "nonce: " + block.nonce;
+        }
+        myText.fontSize = 0.02
+        myText.position.x = 0;
+        myText.position.y = -0.3 - j*0.05;
+        myText.position.z = 1 - i * 20;
+        myText.color = '#f4f1de'
+        // Update the rendering:
+        component.scene.add(myText)
+        myText.sync()
+      }
       if (i == 0) {
         var myText = new Text()
         // Set properties to configure:
@@ -469,56 +488,6 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
         component.scene.add(myText)
         myText.sync()
       }
-
-      var myText = new Text()
-      // Set properties to configure:
-      myText.text = "Hash: " + block.hash;
-      myText.fontSize = 0.02
-      myText.position.x = 0;
-      myText.position.y = -0.3;
-      myText.position.z = 1 - i * 20;
-      myText.color = '#f4f1de'
-      // Update the rendering:
-      component.scene.add(myText)
-      myText.sync()
-
-      var myText = new Text()
-      // Set properties to configure:
-      myText.text = "Previous hash: " + block.previousHash;
-      myText.fontSize = 0.02
-      myText.position.x = 0;
-      myText.position.y = -0.35;
-      myText.position.z = 1 - i * 20;
-      myText.color = '#f4f1de'
-      // Update the rendering:
-      component.scene.add(myText)
-      myText.sync()
-
-      var myText = new Text()
-      // Set properties to configure:
-      myText.text = "Time stamp: " + block.timestamp;
-      myText.fontSize = 0.02
-      myText.position.x = 0;
-      myText.position.y = -0.4;
-      myText.position.z = 1 - i * 20;
-      myText.color = '#f4f1de'
-      // Update the rendering:
-      component.scene.add(myText)
-      myText.sync()
-
-      var myText = new Text()
-      // Set properties to configure:
-      myText.text = "nonce: " + block.nonce;
-      myText.fontSize = 0.02
-      myText.position.x = 0;
-      myText.position.y = -0.45;
-      myText.position.z = 1 - i * 20;
-      myText.color = '#f4f1de'
-      // Update the rendering:
-      component.scene.add(myText)
-      myText.sync()
-
-
       i += 1;
     })
 
@@ -539,18 +508,9 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
       cube.position.x = 0.5;
       cube.position.z = -index * 20;
       cube.needsUpdate = true;
-      //component.scene.add(cube);
-
-      //component.scene.add(cube);
     })
   }
 
-  /**
- * Start the rendering loop
- *
- * @private
- * @memberof BlockchainSceneComponent
- */
 
   onResized(event) {
     this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -558,20 +518,8 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-  private updateCamera(ev) {
-    let div1 = document.getElementById("div1");
-
-
-  }
-
 
   private startRenderingLoop() {
-    //* Renderer
-    // Use canvas element in template
-
-    //window.addEventListener("scroll", this.updateCamera);
-
-
     this.camera.position.x = -2;
     this.camera.position.y = 0;
     this.camera.position.z = 70;
@@ -587,27 +535,22 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
     (function render() {
       requestAnimationFrame(render);
 
+      //if at start of page move down
       if (window.pageYOffset < component.intro_animation) {
         component.camera.position.y = 2 - window.scrollY / 1000;
         component.camera.position.z = 90 - window.scrollY / 100.0;
 
       }
+      //afterwards move through blocks
       else {
         component.camera.position.z = 90 - window.scrollY / 100.0;
         component.camera.position.x = -2 + window.scrollY / 16000.0;
       }
 
+      //determine which block is selected
       component.snap_points.forEach(function (position, index) {
         if ((position - window.pageYOffset) < 700 && (position - window.pageYOffset) > -700) {
-          // window.scrollTo({
-          //   top: position,
-          //   left: 0,
-          //   behavior: 'smooth'
-          // });
-
           component.index = index;
-
-
           if (component.currentBlock != component.blocks[index]) {
             component.currentBlock = component.blocks[index];
             if (index == 0) {
@@ -616,7 +559,6 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
             else {
               component.firstPage = false;
             }
-
 
             component.scene.traverse(function (node) {
               if (node instanceof THREE.Mesh) {
@@ -629,14 +571,8 @@ export class BlockchainSceneComponent implements OnInit, AfterViewInit {
               }
             });
           }
-          //component.camera.position.z = 70 - window.scrollY / 100.0;
-          //component.camera.position.x = -2 + window.scrollY / 16000.0;
         }
       })
-
-
-
-
       component.renderer.render(component.scene, component.camera);
     }());
   }

@@ -1,8 +1,5 @@
 <div class="mainPage">
     <canvas (window:resize)="onResized($event)" #canvas id="canvas" style="height: 100%, width=100%;">
-        <!-- <app-block-view *ngFor="let block of blocks" [block]="block">
-        {{ block }}
-    </app-block-view>  -->
     </canvas>
 
 
@@ -75,7 +72,8 @@
             <div class="form-group">
                 <label for="toAddress">To address</label>
                 <select name="toAddress" id="toAddress" [(ngModel)]="newTx.toAddress">
-                    <option [value]="senseiKey.publicKey">{{senseiKey.publicKey}}</option></select>
+                    <option [value]="senseiKey.publicKey">{{senseiKey.publicKey}}</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -90,20 +88,18 @@
 
             <button (click)="transactionCreator = false" class="button button-primary">Cancel</button>
 
-            <button (click)="createTransaction0()" class="button button-primary">Sign and create transaction</button>
+            <button (click)="createTransaction()" class="button button-primary">Sign and create transaction</button>
 
         </div>
 
     </div>
 
 
-
-
     <div class="extra_info_wrapper" *ngIf="!firstPage">
         <p><b>My balance: </b>{{ my_balance || '0' }}</p>
         <p><b>Pending messages: </b>{{ pendingTransactions?.length || '0' }}</p>
         <button (click)="transactionCreator = !transactionCreator">Message creator</button>
-        <button (click)="minePendingTransactions0()" class="button button-primary">Mine pending messages</button>
+        <button (click)="minePendingTransactions()" class="button button-primary">Mine pending messages</button>
     </div>
 
     <div id="div1" class="page-wrapper">
